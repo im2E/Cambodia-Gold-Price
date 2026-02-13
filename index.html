@@ -160,20 +160,54 @@ document.getElementById('today-date').textContent = formattedDate;
 
 <script>
     let currentPricePerGram = 0;
+    let currentPricePerOunce = 0;
 
     function calculateCustomAmount() {
         const amount = parseFloat(document.getElementById('customAmount').value);
+        const unit = document.getElementById('unitSelect').value;
         const customResult = document.getElementById('customResult');
         const customPrice = document.getElementById('customPrice');
+        const customConversion = document.getElementById('customConversion');
         
         if (amount && amount > 0 && currentPricePerGram > 0) {
-            const customTotal = currentPricePerGram * amount;
-            customPrice.innerHTML = `
-                ${amount}g = $${customTotal.toFixed(2)}<br>
-                <span style="font-size: 14px; color: #4caf50;">
-                    (${(amount / 37.5).toFixed(2)} damlung | ${(amount / 3.75).toFixed(2)} chi)
-                </span>
-            `;
+            let totalPrice = 0;
+            let grams = 0;
+            let unitLabel = '';
+            
+            // Convert to grams and calculate price based on selected unit
+            switch(unit) {
+                case 'gram':
+                    grams = amount;
+                    totalPrice = currentPricePerGram * amount;
+                    unitLabel = `${amount}g`;
+                    break;
+                case 'ounce':
+                    grams = amount * 31.1035;
+                    totalPrice = currentPricePerOunce * amount;
+                    unitLabel = `${amount} oz`;
+                    break;
+                case 'chi':
+                    grams = amount * 3.75;
+                    totalPrice = currentPricePerGram * grams;
+                    unitLabel = `${amount} chi`;
+                    break;
+                case 'damlung':
+                    grams = amount * 37.5;
+                    totalPrice = currentPricePerGram * grams;
+                    unitLabel = `${amount} damlung`;
+                    break;
+            }
+            
+            customPrice.innerHTML = `${unitLabel} = $${totalPrice.toFixed(2)}`;
+            
+            // Show conversions to other units
+            const conversions = [];
+            if (unit !== 'ounce') conversions.push(`${(grams / 31.1035).toFixed(3)} oz`);
+            if (unit !== 'gram') conversions.push(`${grams.toFixed(2)} g`);
+            if (unit !== 'chi') conversions.push(`${(grams / 3.75).toFixed(2)} chi`);
+            if (unit !== 'damlung') conversions.push(`${(grams / 37.5).toFixed(3)} damlung`);
+            
+            customConversion.innerHTML = conversions.join(' | ');
             customResult.style.display = 'block';
         } else {
             customResult.style.display = 'none';
@@ -192,6 +226,7 @@ document.getElementById('today-date').textContent = formattedDate;
             
             const data = await response.json();
             const pricePerOunce = data.price;
+            currentPricePerOunce = pricePerOunce;
             
             const pricePerGram = pricePerOunce / 31.1035;
             currentPricePerGram = pricePerGram;
@@ -221,11 +256,18 @@ document.getElementById('today-date').textContent = formattedDate;
                         <div class="info-value">$${pricePerChi.toFixed(2)}</div>
                     </div>
                     <div class="info-box">
-                        <div class="info-label">Custom Amount (g)</div>
-                        <div class="info-value">
+                        <div class="info-label">Custom Calculator</div>
+                        <div class="info-value" style="display: flex; flex-direction: column; gap: 8px;">
                             <input type="number" id="customAmount" placeholder="0" min="0" step="0.01"
                                    oninput="calculateCustomAmount()"
-                                   style="width: 80px; padding: 5px; border: 2px solid #667eea; border-radius: 5px; text-align: center; font-size: 16px; font-weight: bold;">
+                                   style="width: 100%; padding: 5px; border: 2px solid #667eea; border-radius: 5px; text-align: center; font-size: 16px; font-weight: bold;">
+                            <select id="unitSelect" onchange="calculateCustomAmount()"
+                                    style="width: 100%; padding: 5px; border: 2px solid #667eea; border-radius: 5px; text-align: center; font-size: 14px; font-weight: bold; background: white; cursor: pointer;">
+                                <option value="gram">Gram (g)</option>
+                                <option value="ounce">Ounce (oz)</option>
+                                <option value="chi">Chi (3.75g)</option>
+                                <option value="damlung">Damlung (37.5g)</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -233,6 +275,7 @@ document.getElementById('today-date').textContent = formattedDate;
                 <div id="customResult" style="display: none; background: #e8f5e9; border-radius: 10px; padding: 15px; margin-top: 15px; text-align: center;">
                     <div style="color: #2e7d32; font-size: 14px; margin-bottom: 8px; font-weight: 600;">Custom Calculation</div>
                     <div id="customPrice" style="color: #1b5e20; font-size: 24px; font-weight: bold;"></div>
+                    <div id="customConversion" style="color: #4caf50; font-size: 14px; margin-top: 8px;"></div>
                 </div>
                 
                 <button class="refresh-btn" onclick="fetchGoldPrice()">🔄 Refresh Price</button>

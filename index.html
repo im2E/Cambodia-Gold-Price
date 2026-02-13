@@ -12,125 +12,128 @@
             box-sizing: border-box;
         }
 
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 50vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-    }
+```
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
 
-    .container {
-        background: white;
-        border-radius: 20px;
-        padding: 10px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        max-width: 500px;
-        width: 100%;
-    }
+.container {
+    background: white;
+    border-radius: 20px;
+    padding: 10px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+    width: 100%;
+}
 
-    h1 {
-        color: #333;
-        text-align: center;
-        margin-bottom: 30px;
-        font-size: 28px;
-    }
+h1 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 28px;
+}
 
-    .gold-icon {
-        text-align: center;
-        font-size: 70px;
-        margin-bottom: 1px;
-    }
+.gold-icon {
+    text-align: center;
+    font-size: 70px;
+    margin-bottom: 1px;
+}
 
-    .price-card {
-        background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-        border-radius: 15px;
-        padding: 25px;
-        margin-bottom: 20px;
-        text-align: center;
-    }
+.price-card {
+    background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 20px;
+    text-align: center;
+}
 
-    .price-label {
-        color: #333;
-        font-size: 14px;
-        font-weight: 600;
-        margin-bottom: 10px;
-        letter-spacing: 1px;
-    }
+.price-label {
+    color: #333;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
 
-    .price-value {
-        color: #fff;
-        font-size: 36px;
-        font-weight: bold;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    }
+.price-value {
+    color: #fff;
+    font-size: 36px;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
 
-    .info-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 15px;
-        margin-top: 20px;
-    }
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 20px;
+}
 
-    .info-box {
-        background: #f8f9fa;
-        border-radius: 10px;
-        padding: 15px;
-        text-align: center;
-    }
+.info-box {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+}
 
-    .info-label {
-        color: #667;
-        font-size: 12px;
-        margin-bottom: 5px;
-    }
+.info-label {
+    color: #667;
+    font-size: 12px;
+    margin-bottom: 5px;
+}
 
-    .info-value {
-        color: #333;
-        font-size: 18px;
-        font-weight: bold;
-    }
+.info-value {
+    color: #333;
+    font-size: 18px;
+    font-weight: bold;
+}
 
-    .loading {
-        text-align: center;
-        color: #667;
-        font-style: italic;
-    }
+.loading {
+    text-align: center;
+    color: #667;
+    font-style: italic;
+}
 
-    .error {
-        background: #fee;
-        color: #c33;
-        padding: 15px;
-        border-radius: 10px;
-        text-align: center;
-    }
+.error {
+    background: #fee;
+    color: #c33;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+}
 
-    .refresh-btn {
-        width: 100%;
-        padding: 12px;
-        background: #667eea;
-        color: white;
-        border: none;
-        border-radius: 10px;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-        margin-top: 20px;
-        transition: background 0.3s;
-    }
+.refresh-btn {
+    width: 100%;
+    padding: 12px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background 0.3s;
+}
 
-    .refresh-btn:hover {
-        background: #5568d3;
-    }
+.refresh-btn:hover {
+    background: #5568d3;
+}
 
-    .timestamp {
-        text-align: center;
-        color: #999;
-        font-size: 12px;
-        margin-top: 15px;
-    }
+.timestamp {
+    text-align: center;
+    color: #999;
+    font-size: 12px;
+    margin-top: 15px;
+}
+```
+
 </style>
 
 </head>
@@ -145,7 +148,10 @@
         String(today.getDate()).padStart(2, '0') + '/' +
         today.getFullYear();
 
-    document.getElementById('today-date').textContent = formattedDate;
+```
+document.getElementById('today-date').textContent = formattedDate;
+```
+
 </script>
         <div id="content">
             <p class="loading">Loading gold prices...</p>
@@ -153,6 +159,27 @@
     </div>
 
 <script>
+    let currentPricePerGram = 0;
+
+    function calculateCustomAmount() {
+        const amount = parseFloat(document.getElementById('customAmount').value);
+        const customResult = document.getElementById('customResult');
+        const customPrice = document.getElementById('customPrice');
+        
+        if (amount && amount > 0 && currentPricePerGram > 0) {
+            const customTotal = currentPricePerGram * amount;
+            customPrice.innerHTML = `
+                ${amount}g = $${customTotal.toFixed(2)}<br>
+                <span style="font-size: 14px; color: #4caf50;">
+                    (${(amount / 37.5).toFixed(2)} damlung | ${(amount / 3.75).toFixed(2)} chi)
+                </span>
+            `;
+            customResult.style.display = 'block';
+        } else {
+            customResult.style.display = 'none';
+        }
+    }
+
     async function fetchGoldPrice() {
         const contentDiv = document.getElementById('content');
         
@@ -167,6 +194,7 @@
             const pricePerOunce = data.price;
             
             const pricePerGram = pricePerOunce / 31.1035;
+            currentPricePerGram = pricePerGram;
             const pricePerDamlung = pricePerGram * 37.5;
             const pricePerChi = pricePerGram * 3.75;
             
@@ -189,19 +217,34 @@
 
                 <div class="info-grid">
                     <div class="info-box">
-                        <div class="info-label">Per Chi</div>
+                        <div class="info-label">Per Chi (3.75g)</div>
                         <div class="info-value">$${pricePerChi.toFixed(2)}</div>
                     </div>
                     <div class="info-box">
-                        <div class="info-label">Cambodia</div>
-                        <div class="info-value">🏆</div>
+                        <div class="info-label">Custom Amount (g)</div>
+                        <div class="info-value">
+                            <input type="number" id="customAmount" placeholder="0" min="0" step="0.01"
+                                   oninput="calculateCustomAmount()"
+                                   style="width: 80px; padding: 5px; border: 2px solid #667eea; border-radius: 5px; text-align: center; font-size: 16px; font-weight: bold;">
+                        </div>
                     </div>
+                </div>
+                
+                <div id="customResult" style="display: none; background: #e8f5e9; border-radius: 10px; padding: 15px; margin-top: 15px; text-align: center;">
+                    <div style="color: #2e7d32; font-size: 14px; margin-bottom: 8px; font-weight: 600;">Custom Calculation</div>
+                    <div id="customPrice" style="color: #1b5e20; font-size: 24px; font-weight: bold;"></div>
                 </div>
                 
                 <button class="refresh-btn" onclick="fetchGoldPrice()">🔄 Refresh Price</button>
                 
                 <div class="timestamp">Last updated: ${new Date().toLocaleString()}</div>
             `;
+            
+            // Recalculate if there was a previous value
+            const existingValue = document.getElementById('customAmount')?.value;
+            if (existingValue) {
+                calculateCustomAmount();
+            }
             
         } catch (error) {
             contentDiv.innerHTML = `

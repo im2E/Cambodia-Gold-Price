@@ -137,7 +137,16 @@
 <body>
     <div class="container">
         <div class="gold-icon">🇰🇭</div>
-        <h1>Gold Price</h1>
+        <h1>Gold Price <span id="today-date"></span></h1>
+<script>
+    const today = new Date();
+    const formattedDate =
+        String(today.getMonth() + 1).padStart(2, '0') + '/' +
+        String(today.getDate()).padStart(2, '0') + '/' +
+        today.getFullYear();
+
+    document.getElementById('today-date').textContent = formattedDate;
+</script>
         <div id="content">
             <p class="loading">Loading gold prices...</p>
         </div>

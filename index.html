@@ -2,163 +2,164 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Cambodian Gold Price (Damlung)</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cambodian Gold Price — Damlung</title>
 
 <style>
-  body {
+body{
     font-family: Arial, sans-serif;
-    background: #0f172a;
-    color: #fff;
-    padding: 20px;
-    text-align: center;
-  }
+    background:#111;
+    color:#fff;
+    text-align:center;
+    padding:20px;
+}
 
-  h1 { color: gold; }
+.card{
+    background:#1c1c1c;
+    padding:25px;
+    border-radius:12px;
+    max-width:600px;
+    margin:auto;
+    box-shadow:0 0 20px rgba(255,215,0,.25);
+}
 
-  .card {
-    background: #111827;
-    padding: 20px;
-    border-radius: 12px;
-    margin: 20px auto;
-    max-width: 500px;
-    box-shadow: 0 0 20px rgba(255,215,0,0.2);
-  }
+.price{
+    font-size:40px;
+    color:#FFD700;
+    margin:10px 0;
+}
 
-  .price {
-    font-size: 2em;
-    color: #ffd700;
-    margin: 10px 0;
-  }
+small{color:#bbb;}
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+}
 
-  th, td {
-    padding: 8px;
-    border-bottom: 1px solid #333;
-  }
+th,td{
+    padding:10px;
+    border-bottom:1px solid #333;
+}
 
-  th { background: #1f2937; }
+th{color:#FFD700;}
 </style>
 </head>
 
 <body>
 
-<h1>🇰🇭 Cambodian Gold Price</h1>
-
 <div class="card">
-  <h2>Live Price</h2>
 
-  <div>Gold Price per Gram (USD)</div>
-  <div id="gramPrice" class="price">Loading...</div>
+<h2>🇰🇭 Gold Price — 1 Damlung (37.5 g)</h2>
 
-  <div>Price per Damlung (37.5 g)</div>
-  <div id="damlungPrice" class="price">Loading...</div>
+<div>Gold price per gram (USD)</div>
+<div id="gramPrice" class="price">Loading...</div>
 
-  <small>Updates daily • Based on live global gold price</small>
-</div>
+<div>Price per Damlung</div>
+<div id="damlungPrice" class="price">--</div>
 
-<div class="card">
-  <h2>📅 30-Day Price History</h2>
-  <table id="historyTable">
-    <thead>
-      <tr>
-        <th>Date</th>
-        <th>Gram (USD)</th>
-        <th>Damlung (USD)</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+<small>Updates automatically</small>
+
+<h3>📊 Last 30 Days History</h3>
+
+<table id="historyTable">
+<tr>
+<th>Date</th>
+<th>USD / Damlung</th>
+</tr>
+</table>
+
 </div>
 
 <script>
-const DAMLUNG_GRAMS = 37.5;
-const STORAGE_KEY = "goldHistory";
 
-// -------- FETCH LIVE GOLD PRICE --------
-// Using gold price API (spot price per gram)
-async function fetchGoldPrice() {
-  try {
-    const res = await fetch("https://api.metals.live/v1/spot/gold");
-    const data = await res.json();
+// ===== SETTINGS =====
+const GRAMS_PER_DAMLUNG = 37.5;
 
-    // API returns price per troy ounce
-    const pricePerOunce = data[0].price;
-    const pricePerGram = pricePerOunce / 31.1035;
+// Public gold price API (no key required)
+const API_URL =
+"https://api.metals.live/v1/spot/gold";
 
-    return pricePerGram;
-  } catch (err) {
-    console.error("Price fetch failed:", err);
-    return null;
-  }
+// ===== FETCH LIVE PRICE =====
+async function loadPrice() {
+    try {
+
+        const response = await fetch(API_URL);
+        const data = await response.json();
+
+        // API returns price per ounce
+        const pricePerOunce = data[0].price;
+
+        // Convert ounce → gram
+        const pricePerGram = pricePerOunce / 31.1035;
+
+        // Calculate damlung price
+        const damlungPrice = pricePerGram * GRAMS_PER_DAMLUNG;
+
+        document.getElementById("gramPrice")
+            .textContent = "$" + pricePerGram.toFixed(2);
+
+        document.getElementById("damlungPrice")
+            .textContent = "$" + damlungPrice.toFixed(2);
+
+        saveHistory(damlungPrice.toFixed(2));
+
+    } catch (e) {
+        document.getElementById("gramPrice")
+            .textContent = "Error loading price";
+    }
 }
 
-// -------- SAVE DAILY HISTORY --------
-function saveHistory(gramPrice) {
-  const today = new Date().toISOString().slice(0, 10);
+// ===== HISTORY STORAGE =====
+function saveHistory(price) {
 
-  let history = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    const today = new Date().toLocaleDateString();
 
-  // Avoid duplicate entry for same day
-  if (!history.find(h => h.date === today)) {
-    history.unshift({
-      date: today,
-      gram: gramPrice,
-      damlung: gramPrice * DAMLUNG_GRAMS
+    let history =
+        JSON.parse(localStorage.getItem("goldHistory") || "[]");
+
+    // avoid duplicate same day entry
+    if (history.length && history[0].date === today) return;
+
+    history.unshift({date: today, price});
+
+    // keep 30 days
+    history = history.slice(0, 30);
+
+    localStorage.setItem("goldHistory",
+        JSON.stringify(history));
+
+    renderHistory();
+}
+
+// ===== DISPLAY HISTORY =====
+function renderHistory() {
+
+    const history =
+        JSON.parse(localStorage.getItem("goldHistory") || "[]");
+
+    const table = document.getElementById("historyTable");
+
+    // remove old rows
+    table.innerHTML =
+        "<tr><th>Date</th><th>USD / Damlung</th></tr>";
+
+    history.forEach(item => {
+
+        const row = table.insertRow();
+
+        row.insertCell(0).textContent = item.date;
+        row.insertCell(1).textContent = "$" + item.price;
+
     });
-  }
-
-  // Keep only last 30 days
-  history = history.slice(0, 30);
-
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
-  return history;
 }
 
-// -------- DISPLAY HISTORY TABLE --------
-function renderHistory(history) {
-  const tbody = document.querySelector("#historyTable tbody");
-  tbody.innerHTML = "";
+// ===== INIT =====
+loadPrice();
+renderHistory();
 
-  history.forEach(item => {
-    const tr = document.createElement("tr");
+// Optional auto refresh every hour
+setInterval(loadPrice, 3600000);
 
-    tr.innerHTML = `
-      <td>${item.date}</td>
-      <td>$${item.gram.toFixed(2)}</td>
-      <td>$${item.damlung.toFixed(2)}</td>
-    `;
-
-    tbody.appendChild(tr);
-  });
-}
-
-// -------- MAIN --------
-(async () => {
-  const gramPrice = await fetchGoldPrice();
-
-  if (!gramPrice) {
-    document.getElementById("gramPrice").innerText = "Error";
-    document.getElementById("damlungPrice").innerText = "Error";
-    return;
-  }
-
-  const damlungPrice = gramPrice * DAMLUNG_GRAMS;
-
-  document.getElementById("gramPrice").innerText =
-    "$" + gramPrice.toFixed(2);
-
-  document.getElementById("damlungPrice").innerText =
-    "$" + damlungPrice.toFixed(2);
-
-  const history = saveHistory(gramPrice);
-  renderHistory(history);
-})();
 </script>
 
 </body>

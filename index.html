@@ -2,72 +2,88 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Damlung Gold Price (Live)</title>
+<title>Cambodian Damlung Gold Price (Live)</title>
 <style>
-    body { font-family: Arial, sans-serif; margin: 30px; }
-    h1 { color: #b8860b; }
-    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-    th { background: #f4f4f4; }
+    body { font-family: Arial, sans-serif; margin: 40px; background: #fafafa; }
+    h1 { margin-bottom: 5px; }
+    #priceBox { padding: 20px; background: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); width: 350px; }
+    table { margin-top: 25px; border-collapse: collapse; width: 500px; background: white; }
+    th, td { padding: 10px; border: 1px solid #ddd; text-align: center; }
+    th { background: #f0f0f0; }
 </style>
 </head>
 <body>
 
-<h1>Live Cambodian Damlung Gold Price</h1>
-<p>1 damlung = 37.5 grams</p>
+<h1>Cambodian Gold Price — 1 Damlung (37.5g)</h1>
+<div id="priceBox">
+    <div><strong>Live Price Per Gram:</strong> <span id="gramPrice">Loading...</span></div>
+    <div><strong>1 Damlung (37.5g):</strong> <span id="damlungPrice">Loading...</span></div>
+    <div style="margin-top:10px; font-size: 0.9em; color: #666;">
+        Updated: <span id="updatedTime">Loading...</span>
+    </div>
+</div>
 
-<h2>Current Price</h2>
-<p><strong>Gold per gram:</strong> <span id="gramPrice">Loading...</span></p>
-<p><strong>Price per damlung (37.5g):</strong> <span id="damlungPrice">Loading...</span></p>
-
-<h2>Last 30 Days Price History</h2>
+<h2>30‑Day Price History</h2>
 <table>
     <thead>
         <tr>
             <th>Date</th>
-            <th>Damlung Price (USD)</th>
+            <th>Price per Gram (USD)</th>
+            <th>Damlung Value (USD)</th>
         </tr>
     </thead>
     <tbody id="historyTable"></tbody>
 </table>
 
 <script>
-// APMEX public gold price endpoint
-const API_URL = "https://www.apmex.com/api/spot/price/gold";
+// APMEX public JSON endpoint for gold spot price per gram
+const API_URL = "https://www.apmex.com/api/spot/metal/gold";
 
 async function fetchGoldPrice() {
     try {
         const response = await fetch(API_URL);
         const data = await response.json();
 
-        const pricePerGram = data.pricePerGram;
-        const damlungPrice = pricePerGram * 37.5;
+        // APMEX returns price per troy ounce; convert to grams
+        const pricePerOunce = data.spot;
+        const gramPrice = pricePerOunce / 31.1035;
 
-        document.getElementById("gramPrice").textContent = "$" + pricePerGram.toFixed(2);
-        document.getElementById("damlungPrice").textContent = "$" + damlungPrice.toFixed(2);
+        updateDisplay(gramPrice);
+        updateHistory(gramPrice);
 
-        updateHistory(damlungPrice);
-
-    } catch (error) {
-        console.error("Error fetching gold price:", error);
+    } catch (err) {
+        console.error("Error fetching gold price:", err);
+        document.getElementById("gramPrice").innerText = "Error";
     }
 }
 
-function updateHistory(damlungPrice) {
-    const today = new Date().toISOString().split("T")[0];
+function updateDisplay(gramPrice) {
+    const damlungPrice = gramPrice * 37.5;
 
-    let history = JSON.parse(localStorage.getItem("damlungHistory")) || [];
+    document.getElementById("gramPrice").innerText = "$" + gramPrice.toFixed(2);
+    document.getElementById("damlungPrice").innerText = "$" + damlungPrice.toFixed(2);
+    document.getElementById("updatedTime").innerText = new Date().toLocaleString();
+}
+
+function updateHistory(gramPrice) {
+    const today = new Date().toISOString().split("T")[0];
+    const damlung = gramPrice * 37.5;
+
+    let history = JSON.parse(localStorage.getItem("goldHistory") || "[]");
 
     // Prevent duplicate entries for the same day
     if (!history.find(entry => entry.date === today)) {
-        history.push({ date: today, price: damlungPrice });
+        history.unshift({
+            date: today,
+            gram: gramPrice,
+            damlung: damlung
+        });
     }
 
     // Keep only last 30 days
-    history = history.slice(-30);
+    history = history.slice(0, 30);
 
-    localStorage.setItem("damlungHistory", JSON.stringify(history));
-
+    localStorage.setItem("goldHistory", JSON.stringify(history));
     renderHistory(history);
 }
 
@@ -75,20 +91,22 @@ function renderHistory(history) {
     const table = document.getElementById("historyTable");
     table.innerHTML = "";
 
-    history.slice().reverse().forEach(entry => {
-        const row = `<tr>
-            <td>${entry.date}</td>
-            <td>$${entry.price.toFixed(2)}</td>
-        </tr>`;
-        table.innerHTML += row;
+    history.forEach(row => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${row.date}</td>
+            <td>$${row.gram.toFixed(2)}</td>
+            <td>$${row.damlung.toFixed(2)}</td>
+        `;
+        table.appendChild(tr);
     });
 }
 
 // Run on load
 fetchGoldPrice();
 
-// Refresh price every 10 minutes
-setInterval(fetchGoldPrice, 600000);
+// Auto-update once per day
+setInterval(fetchGoldPrice, 24 * 60 * 60 * 1000);
 </script>
 
 </body>

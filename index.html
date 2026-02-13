@@ -1,138 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>im2E - Cambodia Gold Price</title>
-    <link rel="stylesheet" href="app.css">
+    <title>Gold Price</title>
 </head>
-
 <body>
-    
-    <div class="gold-price-container">
-        <h1 style="text-align: center; color: #333;">Cambodia Gold Price Tracker</h1>
-        
-        <div class="price-display" id="priceDisplay">
-            <div class="loading">Loading gold prices...</div>
-        </div>
-
-        <div class="history-section">
-            <h2 class="history-title">Price History</h2>
-            <table id="priceHistoryTable">
-                <thead>
-                    <tr>
-                        <th>Time</th>
-                        <th>Price per Gram (USD)</th>
-                        <th>Price per Damlung (USD)</th>
-                        <th>Change</th>
-                    </tr>
-                </thead>
-                <tbody id="historyTableBody">
-                    <tr>
-                        <td colspan="4" style="text-align: center; color: #999;">Loading history...</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
+    <h1>Current Gold Price</h1>
+    <div id="price"></div>
     <script>
-        const DAMLUNG_GRAMS = 37.5; // 1 Damlung = 37.5 grams
-        const GOLD_API_URL = 'https://www.gold-api.com/api/XAU/USD';
-        const UPDATE_INTERVAL = 60000; // Update every minute (60000ms)
-        
-        let priceHistory = [];
-
-        // Fetch gold price from Gold API
-        async function fetchGoldPrice() {
-            try {
-                const response = await fetch(GOLD_API_URL);
-                const data = await response.json();
-                
-                if (data.price) {
-                    const pricePerGram = data.price / 31.1035; // Convert troy ounce to gram
-                    const pricePerDamlung = pricePerGram * DAMLUNG_GRAMS;
-                    
-                    const timestamp = new Date();
-                    
-                    // Calculate change if we have previous data
-                    let change = 'N/A';
-                    if (priceHistory.length > 0) {
-                        const previousPrice = priceHistory[0].pricePerGram;
-                        const changeAmount = pricePerGram - previousPrice;
-                        const changePercent = ((changeAmount / previousPrice) * 100).toFixed(2);
-                        change = `${changeAmount > 0 ? '+' : ''}${changeAmount.toFixed(2)} (${changePercent}%)`;
-                    }
-                    
-                    const priceEntry = {
-                        timestamp: timestamp,
-                        pricePerGram: parseFloat(pricePerGram.toFixed(2)),
-                        pricePerDamlung: parseFloat(pricePerDamlung.toFixed(2)),
-                        change: change
-                    };
-                    
-                    // Add to history (keep last 24 entries)
-                    priceHistory.unshift(priceEntry);
-                    if (priceHistory.length > 24) {
-                        priceHistory.pop();
-                    }
-                    
-                    updateDisplay(priceEntry);
-                    updateHistoryTable();
-                } else {
-                    showError('Unable to fetch gold price data');
-                }
-            } catch (error) {
-                console.error('Error fetching gold price:', error);
-                showError('Error: Could not connect to Gold API. ' + error.message);
-            }
-        }
-
-        function updateDisplay(priceEntry) {
-            const displayDiv = document.getElementById('priceDisplay');
-            const formattedTime = priceEntry.timestamp.toLocaleString();
-            
-            displayDiv.innerHTML = `
-                <div class="price-label">Gold Price per Gram</div>
-                <div class="price-value">$${priceEntry.pricePerGram.toFixed(2)}</div>
-                
-                <div class="price-label">Cambodia Gold Price (per Damlung)</div>
-                <div class="damlung-price">$${priceEntry.pricePerDamlung.toFixed(2)}</div>
-                
-                <div class="update-time">Last updated: ${formattedTime}</div>
-            `;
-        }
-
-        function updateHistoryTable() {
-            const tbody = document.getElementById('historyTableBody');
-            
-            if (priceHistory.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #999;">No data available</td></tr>';
-                return;
-            }
-            
-            tbody.innerHTML = priceHistory.map(entry => `
-                <tr>
-                    <td>${entry.timestamp.toLocaleTimeString()}</td>
-                    <td>$${entry.pricePerGram.toFixed(2)}</td>
-                    <td>$${entry.pricePerDamlung.toFixed(2)}</td>
-                    <td>${entry.change}</td>
-                </tr>
-            `).join('');
-        }
-
-        function showError(message) {
-            const displayDiv = document.getElementById('priceDisplay');
-            displayDiv.innerHTML = `<div class="error">${message}</div>`;
-        }
-
-        // Initial fetch
-        fetchGoldPrice();
-
-        // Set up automatic updates
-        setInterval(fetchGoldPrice, UPDATE_INTERVAL);
+        const GOLD_API_URL = 'https://metals-api.com/api/latest'; // Open API endpoint from metals-api.com
+        fetch(GOLD_API_URL + '?access_key=YOUR_ACCESS_KEY&base=USD&symbols=XAU')
+            .then(response => response.json())
+            .then(data => {
+                const price = data.rates.XAU;
+                document.getElementById('price').innerText = `Gold Price: $${price}`;
+            })
+            .catch(error => {
+                console.error('Error fetching the gold price:', error);
+            });
     </script>
 </body>
-
 </html>

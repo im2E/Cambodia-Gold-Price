@@ -157,16 +157,10 @@
             const data = await response.json();
             const pricePerOunce = data.price;
             
-            // Convert ounce to gram (1 ounce = 31.1035 grams)
             const pricePerGram = pricePerOunce / 31.1035;
-            
-            // Calculate price for 1 damlung (37.5 grams)
             const pricePerDamlung = pricePerGram * 37.5;
-
-            // Calculate price for 1 chi (3.75 grams)
             const pricePerChi = pricePerGram * 3.75;
             
-            // Display the results
             contentDiv.innerHTML = `
                 <div class="price-card">
                     <div class="price-label">1 DAMLUNG (37.5g)</div>
@@ -214,6 +208,9 @@
     
     // Fetch price on page load
     fetchGoldPrice();
+
+    // Auto-refresh every 10 seconds
+    setInterval(fetchGoldPrice, 10000);
 </script>
 
 </body>

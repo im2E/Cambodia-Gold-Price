@@ -160,13 +160,16 @@
             // Convert ounce to gram (1 ounce = 31.1035 grams)
             const pricePerGram = pricePerOunce / 31.1035;
             
-            // Calculate price for 1 damlung (37.49 grams)
-            const pricePerDamlung = pricePerGram * 37.49;
+            // Calculate price for 1 damlung (37.5 grams)
+            const pricePerDamlung = pricePerGram * 37.5;
+
+            // Calculate price for 1 chi (3.75 grams)
+            const pricePerChi = pricePerGram * 3.75;
             
             // Display the results
             contentDiv.innerHTML = `
                 <div class="price-card">
-                    <div class="price-label">1 Damlung (37.49g)</div>
+                    <div class="price-label">1 DAMLUNG (37.5g)</div>
                     <div class="price-value">$${pricePerDamlung.toFixed(2)}</div>
                 </div>
                 
@@ -174,6 +177,17 @@
                     <div class="info-box">
                         <div class="info-label">Per Ounce</div>
                         <div class="info-value">$${pricePerOunce.toFixed(2)}</div>
+                    </div>
+                    <div class="info-box">
+                        <div class="info-label">Per Gram</div>
+                        <div class="info-value">$${pricePerGram.toFixed(2)}</div>
+                    </div>
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-box">
+                        <div class="info-label">Per Chi</div>
+                        <div class="info-value">$${pricePerChi.toFixed(2)}</div>
                     </div>
                     <div class="info-box">
                         <div class="info-label">Per Gram</div>

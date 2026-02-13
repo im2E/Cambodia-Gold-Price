@@ -34,6 +34,10 @@
                 <span id="pricePerGram" class="price-value">Loading...</span>
             </div>
             <div class="price-item">
+                <label>Gold Price Per Ounce:</label>
+                <span id="pricePerOunce" class="price-value">Loading...</span>
+            </div>
+            <div class="price-item">
                 <label>Price Per Damlung (37.5g):</label>
                 <span id="pricePerDamlung" class="price-value">Loading...</span>
             </div>
@@ -63,6 +67,7 @@
 
     <script>
         const GRAMS_PER_DAMLUNG = 37.5;
+        const GRAMS_PER_OUNCE = 31.1035;
         const APMEX_URL = 'https://www.apmex.com/gold-price/1-gram-gold-price-today';
 
         // Sample price history data (in production, this would come from a database)
@@ -99,9 +104,11 @@
 
         // Update price display
         function updatePrices(pricePerGram) {
+            const pricePerOunce = (pricePerGram * GRAMS_PER_OUNCE).toFixed(2);
             const pricePerDamlung = (pricePerGram * GRAMS_PER_DAMLUNG).toFixed(2);
             
             document.getElementById('pricePerGram').textContent = `$${parseFloat(pricePerGram).toFixed(2)} USD`;
+            document.getElementById('pricePerOunce').textContent = `$${pricePerOunce} USD`;
             document.getElementById('pricePerDamlung').textContent = `$${pricePerDamlung} USD`;
             document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
             

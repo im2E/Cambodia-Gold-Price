@@ -1,166 +1,280 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Cambodian Gold Price — Damlung</title>
-
-<style>
-body{
-    font-family: Arial, sans-serif;
-    background:#111;
-    color:#fff;
-    text-align:center;
-    padding:20px;
-}
-
-.card{
-    background:#1c1c1c;
-    padding:25px;
-    border-radius:12px;
-    max-width:600px;
-    margin:auto;
-    box-shadow:0 0 20px rgba(255,215,0,.25);
-}
-
-.price{
-    font-size:40px;
-    color:#FFD700;
-    margin:10px 0;
-}
-
-small{color:#bbb;}
-
-table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:20px;
-}
-
-th,td{
-    padding:10px;
-    border-bottom:1px solid #333;
-}
-
-th{color:#FFD700;}
-</style>
-</head>
-
-<body>
-
-<div class="card">
-
-<h2>🇰🇭 Gold Price — 1 Damlung (37.5 g)</h2>
-
-<div>Gold price per gram (USD)</div>
-<div id="gramPrice" class="price">Loading...</div>
-
-<div>Price per Damlung</div>
-<div id="damlungPrice" class="price">--</div>
-
-<small>Updates automatically</small>
-
-<h3>📊 Last 30 Days History</h3>
-
-<table id="historyTable">
-<tr>
-<th>Date</th>
-<th>USD / Damlung</th>
-</tr>
-</table>
-
-</div>
-
-<script>
-
-// ===== SETTINGS =====
-const GRAMS_PER_DAMLUNG = 37.5;
-
-// Public gold price API (no key required)
-const API_URL =
-"https://api.metals.live/v1/spot/gold";
-
-// ===== FETCH LIVE PRICE =====
-async function loadPrice() {
-    try {
-
-        const response = await fetch(API_URL);
-        const data = await response.json();
-
-        // API returns price per ounce
-        const pricePerOunce = data[0].price;
-
-        // Convert ounce → gram
-        const pricePerGram = pricePerOunce / 31.1035;
-
-        // Calculate damlung price
-        const damlungPrice = pricePerGram * GRAMS_PER_DAMLUNG;
-
-        document.getElementById("gramPrice")
-            .textContent = "$" + pricePerGram.toFixed(2);
-
-        document.getElementById("damlungPrice")
-            .textContent = "$" + damlungPrice.toFixed(2);
-
-        saveHistory(damlungPrice.toFixed(2));
-
-    } catch (e) {
-        document.getElementById("gramPrice")
-            .textContent = "Error loading price";
+  <meta charset="UTF-8" />
+  <title>Cambodian Gold Damlung Price</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f5f5f5;
+      color: #222;
     }
-}
+    h1, h2 {
+      margin-bottom: 0.3em;
+    }
+    .card {
+      background: #fff;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      border-radius: 6px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .price-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 10px;
+    }
+    .price-box {
+      flex: 1 1 200px;
+      background: #fafafa;
+      border-radius: 4px;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+    }
+    .label {
+      font-size: 0.85rem;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .value {
+      font-size: 1.3rem;
+      font-weight: bold;
+      margin-top: 4px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 6px 8px;
+      text-align: right;
+    }
+    th {
+      background: #f0f0f0;
+    }
+    td.date-cell, th.date-cell {
+      text-align: left;
+    }
+    .updated {
+      font-size: 0.8rem;
+      color: #777;
+      margin-top: 6px;
+    }
+    .error {
+      color: #b00020;
+      margin-top: 8px;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Cambodian Gold Price – 1 Damlung (37.5 g)</h1>
 
-// ===== HISTORY STORAGE =====
-function saveHistory(price) {
+  <div class="card">
+    <h2>Live Gold Price</h2>
+    <p>
+      Based on live gold price per troy ounce, converted to per gram and then multiplied by
+      <strong>37.5 g</strong> for one Cambodian <strong>damlung</strong>.
+    </p>
 
-    const today = new Date().toLocaleDateString();
+    <div class="price-row">
+      <div class="price-box">
+        <div class="label">Gold price per ounce (USD)</div>
+        <div class="value" id="price-ounce">Loading…</div>
+      </div>
+      <div class="price-box">
+        <div class="label">Gold price per gram (USD)</div>
+        <div class="value" id="price-gram">Loading…</div>
+      </div>
+      <div class="price-box">
+        <div class="label">Gold price per damlung – 37.5 g (USD)</div>
+        <div class="value" id="price-damlung">Loading…</div>
+      </div>
+    </div>
+    <div class="updated" id="last-updated"></div>
+    <div class="error" id="live-error"></div>
+  </div>
 
-    let history =
-        JSON.parse(localStorage.getItem("goldHistory") || "[]");
+  <div class="card">
+    <h2>Last 30 Days – Daily Gold Price History</h2>
+    <p>
+      Live daily history of gold price per ounce and per damlung (37.5 g), updated when this page loads.
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th class="date-cell">Date</th>
+          <th>Price/oz (USD)</th>
+          <th>Price/damlung (USD)</th>
+        </tr>
+      </thead>
+      <tbody id="history-body">
+        <tr><td colspan="3" class="date-cell">Loading history…</td></tr>
+      </tbody>
+    </table>
+    <div class="error" id="history-error"></div>
+  </div>
 
-    // avoid duplicate same day entry
-    if (history.length && history[0].date === today) return;
+  <script>
+    // ========= CONFIG =========
+    // Replace with your own API key and endpoint.
+    // Example uses goldapi.io pattern:
+    //   Docs: https://www.goldapi.io/
+    //   Endpoint for latest:  https://www.goldapi.io/api/XAU/USD
+    //   Endpoint for date:    https://www.goldapi.io/api/XAU/USD/YYYY-MM-DD
+    const API_KEY = "goldapi-1b6fesmll3ls50-io";
+    const BASE_URL = "https://www.goldapi.io/api/XAU/USD";
 
-    history.unshift({date: today, price});
+    // 1 troy ounce in grams
+    const GRAMS_PER_TROY_OUNCE = 31.1034768;
+    const DAMLUNG_GRAMS = 37.5;
 
-    // keep 30 days
-    history = history.slice(0, 30);
+    const ounceEl   = document.getElementById("price-ounce");
+    const gramEl    = document.getElementById("price-gram");
+    const damlungEl = document.getElementById("price-damlung");
+    const updatedEl = document.getElementById("last-updated");
+    const liveErrEl = document.getElementById("live-error");
 
-    localStorage.setItem("goldHistory",
-        JSON.stringify(history));
+    const historyBodyEl = document.getElementById("history-body");
+    const historyErrEl  = document.getElementById("history-error");
 
-    renderHistory();
-}
+    function formatUSD(value) {
+      if (!isFinite(value)) return "—";
+      return "$" + value.toFixed(2);
+    }
 
-// ===== DISPLAY HISTORY =====
-function renderHistory() {
+    function formatDateISO(date) {
+      return date.toISOString().slice(0, 10);
+    }
 
-    const history =
-        JSON.parse(localStorage.getItem("goldHistory") || "[]");
+    async function fetchGoldPrice(dateString = null) {
+      const url = dateString ? `${BASE_URL}/${dateString}` : BASE_URL;
 
-    const table = document.getElementById("historyTable");
+      const res = await fetch(url, {
+        headers: {
+          "x-access-token": API_KEY,
+          "Content-Type": "application/json"
+        }
+      });
 
-    // remove old rows
-    table.innerHTML =
-        "<tr><th>Date</th><th>USD / Damlung</th></tr>";
+      if (!res.ok) {
+        throw new Error("HTTP " + res.status);
+      }
 
-    history.forEach(item => {
+      const data = await res.json();
+      // goldapi.io returns "price" as USD per troy ounce for XAU/USD
+      if (!data || typeof data.price !== "number") {
+        throw new Error("Unexpected API response");
+      }
 
-        const row = table.insertRow();
+      return {
+        pricePerOunce: data.price,
+        timestamp: data.timestamp ? new Date(data.timestamp * 1000) : new Date()
+      };
+    }
 
-        row.insertCell(0).textContent = item.date;
-        row.insertCell(1).textContent = "$" + item.price;
+    async function loadLivePrice() {
+      try {
+        liveErrEl.textContent = "";
+        const { pricePerOunce, timestamp } = await fetchGoldPrice();
 
-    });
-}
+        const pricePerGram = pricePerOunce / GRAMS_PER_TROY_OUNCE;
+        const pricePerDamlung = pricePerGram * DAMLUNG_GRAMS;
 
-// ===== INIT =====
-loadPrice();
-renderHistory();
+        ounceEl.textContent   = formatUSD(pricePerOunce);
+        gramEl.textContent    = formatUSD(pricePerGram);
+        damlungEl.textContent = formatUSD(pricePerDamlung);
 
-// Optional auto refresh every hour
-setInterval(loadPrice, 3600000);
+        updatedEl.textContent =
+          "Last updated: " + timestamp.toLocaleString();
+      } catch (err) {
+        console.error(err);
+        liveErrEl.textContent =
+          "Could not load live gold price. Please check your API key or try again later.";
+        ounceEl.textContent   = "—";
+        gramEl.textContent    = "—";
+        damlungEl.textContent = "—";
+      }
+    }
 
-</script>
+    async function loadHistory() {
+      try {
+        historyErrEl.textContent = "";
+        historyBodyEl.innerHTML =
+          '<tr><td colspan="3" class="date-cell">Loading history…</td></tr>';
 
+        const today = new Date();
+        const rows = [];
+
+        // Last 30 days including today
+        for (let i = 0; i < 30; i++) {
+          const d = new Date(today);
+          d.setDate(today.getDate() - i);
+          const dateStr = formatDateISO(d);
+
+          try {
+            const { pricePerOunce } = await fetchGoldPrice(dateStr);
+            const pricePerGram = pricePerOunce / GRAMS_PER_TROY_OUNCE;
+            const pricePerDamlung = pricePerGram * DAMLUNG_GRAMS;
+
+            rows.push({
+              date: dateStr,
+              ounce: pricePerOunce,
+              damlung: pricePerDamlung
+            });
+          } catch (err) {
+            console.warn("History fetch failed for", dateStr, err);
+            rows.push({
+              date: dateStr,
+              ounce: null,
+              damlung: null
+            });
+          }
+        }
+
+        // Sort by date ascending (oldest first)
+        rows.sort((a, b) => (a.date < b.date ? -1 : 1));
+
+        historyBodyEl.innerHTML = "";
+        for (const row of rows) {
+          const tr = document.createElement("tr");
+
+          const tdDate = document.createElement("td");
+          tdDate.className = "date-cell";
+          tdDate.textContent = row.date;
+
+          const tdOunce = document.createElement("td");
+          tdOunce.textContent = row.ounce == null ? "—" : formatUSD(row.ounce);
+
+          const tdDamlung = document.createElement("td");
+          tdDamlung.textContent =
+            row.damlung == null ? "—" : formatUSD(row.damlung);
+
+          tr.appendChild(tdDate);
+          tr.appendChild(tdOunce);
+          tr.appendChild(tdDamlung);
+          historyBodyEl.appendChild(tr);
+        }
+      } catch (err) {
+        console.error(err);
+        historyErrEl.textContent =
+          "Could not load 30‑day history. Please check your API key or rate limits.";
+      }
+    }
+
+    // Initial load
+    loadLivePrice();
+    loadHistory();
+
+    // Optional: refresh live price every hour
+    setInterval(loadLivePrice, 60 * 60 * 1000);
+  </script>
 </body>
 </html>

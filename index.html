@@ -5,217 +5,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>im2E</title>
-    <!-- <link rel="stylesheet" href="app.css"> -->
+    <link rel="stylesheet" href="app.css">
 </head>
 
 <body>
-    <!--
     <svg viewBox="0 0 600 300">
-        <!-- Symbol --
+        <!-- Symbol-->
         <symbol id="s-text">
             <text text-anchor="middle" x="50%" y="50%" dy=".35em">im2E! 12345!</text>
         </symbol>
-        <!-- Duplicate symbols--
+        <!-- Duplicate symbols-->
         <use class="text" xlink:href="#s-text"></use>
         <use class="text" xlink:href="#s-text"></use>
         <use class="text" xlink:href="#s-text"></use>
         <use class="text" xlink:href="#s-text"></use>
         <use class="text" xlink:href="#s-text"></use>
     </svg>
-    -->
-
-    <!-- Gold Price Section for Cambodian Damlung -->
-    <div class="gold-price-section">
-        <h2>Cambodian Gold Prices (Damlung)</h2>
-        
-        <div class="current-price-container">
-            <div class="price-item">
-                <label>Gold Price Per Gram:</label>
-                <span id="pricePerGram" class="price-value">Loading...</span>
-            </div>
-            <div class="price-item">
-                <label>Price Per Ounce (28.35):</label>
-                <span id="pricePerOunce" class="price-value">Loading...</span>
-            </div>
-            <div class="price-item">
-                <label>Price Per Damlung (37.5g):</label>
-                <span id="pricePerDamlung" class="price-value">Loading...</span>
-            </div>
-            <div class="price-item">
-                <label>Last Updated:</label>
-                <span id="lastUpdated" class="timestamp">-</span>
-            </div>
-        </div>
-
-        <h3>Price History</h3>
-        <table class="price-history-table">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Price Per Gram (USD)</th>
-                    <th>Price Per Damlung (USD)</th>
-                    <th>Change</th>
-                </tr>
-            </thead>
-            <tbody id="priceHistoryBody">
-                <tr>
-                    <td colspan="4" style="text-align: center;">Loading price history...</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <script>
-        const GRAMS_PER_DAMLUNG = 37.5;
-        const GRAMS_PER_OUNCE = 28.35;
-        const APMEX_URL = 'https://www.apmex.com/gold-price/1-gram-gold-price-today';
-
-        // Sample price history data (in production, this would come from a database)
-        const priceHistory = [
-            { date: '2026-02-13', pricePerGram: 161.02, change: '+0.45' },
-            { date: '2026-02-12', pricePerGram: 160.57, change: '+2.23' },
-            { date: '2026-02-11', pricePerGram: 158.34, change: '-1.15' },
-            { date: '2026-02-10', pricePerGram: 159.49, change: '+0.89' },
-            { date: '2026-02-09', pricePerGram: 158.60, change: '+1.23' },
-            { date: '2026-02-08', pricePerGram: 157.37, change: '-0.67' },
-            { date: '2026-02-07', pricePerGram: 158.04, change: '+0.92' },
-        ];
-
-        // Fetch current gold price
-        async function fetchGoldPrice() {
-            try {
-                // Using a proxy service since APMEX doesn't have a public API
-                // Alternative: Use a gold price API like metals-api or goldapi
-                const response = await fetch('https://api.metals.live/v1/spot/gold');
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    const pricePerGram = (data.price / 28.35).toFixed(2); // Convert oz to grams
-                    updatePrices(pricePerGram);
-                } else {
-                    // Fallback to sample data
-                    updatePrices(priceHistory[0].pricePerGram);
-                }
-            } catch (error) {
-                console.warn('Could not fetch live gold price, using sample data:', error);
-                updatePrices(priceHistory[0].pricePerGram);
-            }
-        }
-
-        // Update price display
-        function updatePrices(pricePerGram) {
-            const pricePerOunce = (pricePerGram * GRAMS_PER_OUNCE).toFixed(2);
-            const pricePerDamlung = (pricePerGram * GRAMS_PER_DAMLUNG).toFixed(2);
-            
-            document.getElementById('pricePerGram').textContent = `$${parseFloat(pricePerGram).toFixed(2)} USD`;
-            document.getElementById('pricePerOunce').textContent = `$${pricePerOunce} USD`;
-            document.getElementById('pricePerDamlung').textContent = `$${pricePerDamlung} USD`;
-            document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
-            
-            updatePriceHistory();
-        }
-
-        // Update price history table
-        function updatePriceHistory() {
-            const historyBody = document.getElementById('priceHistoryBody');
-            historyBody.innerHTML = '';
-            
-            priceHistory.forEach(record => {
-                const pricePerDamlung = (record.pricePerGram * GRAMS_PER_DAMLUNG).toFixed(2);
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${record.date}</td>
-                    <td>$${parseFloat(record.pricePerGram).toFixed(2)}</td>
-                    <td>$${pricePerDamlung}</td>
-                    <td style="color: ${record.change.startsWith('+') ? 'green' : 'red'};">${record.change}%</td>
-                `;
-                historyBody.appendChild(row);
-            });
-        }
-
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            fetchGoldPrice();
-            // Refresh prices every 5 minutes
-            setInterval(fetchGoldPrice, 5 * 60 * 1000);
-        });
-    </script>
-
-    <style>
-        .gold-price-section {
-            padding: 20px;
-            margin: 20px 0;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            font-family: Arial, sans-serif;
-        }
-
-        .gold-price-section h2 {
-            color: #d4af37;
-            margin-top: 0;
-        }
-
-        .current-price-container {
-            display: flex;
-            gap: 30px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
-
-        .price-item {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .price-item label {
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 5px;
-        }
-
-        .price-value {
-            font-size: 1.5em;
-            color: #d4af37;
-            font-weight: bold;
-        }
-
-        .timestamp {
-            color: #666;
-            font-size: 0.9em;
-        }
-
-        .price-history-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        .price-history-table th,
-        .price-history-table td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: right;
-        }
-
-        .price-history-table th {
-            background-color: #d4af37;
-            color: white;
-            font-weight: bold;
-        }
-
-        .price-history-table tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        .price-history-table tr:hover {
-            background-color: #e8e8e8;
-        }
-
-        .price-history-table td:first-child,
-        .price-history-table th:first-child {
-            text-align: left;
-        }
-    </style>
 </body>
 
 </html>

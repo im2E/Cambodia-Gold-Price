@@ -11,126 +11,126 @@
             padding: 0;
             box-sizing: border-box;
         }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
 
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 50vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-    }
+.container {
+    background: white;
+    border-radius: 20px;
+    padding: 10px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+    width: 100%;
+}
 
-    .container {
-        background: white;
-        border-radius: 20px;
-        padding: 10px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        max-width: 500px;
-        width: 100%;
-    }
+h1 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 20px;
+}
 
-    h1 {
-        color: #333;
-        text-align: center;
-        margin-bottom: 30px;
-        font-size: 28px;
-    }
+.gold-icon {
+    text-align: center;
+    font-size: 70px;
+    margin-bottom: 1px;
+}
 
-    .gold-icon {
-        text-align: center;
-        font-size: 70px;
-        margin-bottom: 1px;
-    }
+.price-card {
+    background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 20px;
+    text-align: center;
+}
 
-    .price-card {
-        background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-        border-radius: 15px;
-        padding: 25px;
-        margin-bottom: 20px;
-        text-align: center;
-    }
+.price-label {
+    color: #333;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
 
-    .price-label {
-        color: #333;
-        font-size: 14px;
-        font-weight: 600;
-        margin-bottom: 10px;
-        letter-spacing: 1px;
-    }
+.price-value {
+    color: #fff;
+    font-size: 36px;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
 
-    .price-value {
-        color: #fff;
-        font-size: 36px;
-        font-weight: bold;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    }
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 20px;
+}
 
-    .info-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 15px;
-        margin-top: 20px;
-    }
+.info-box {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+}
 
-    .info-box {
-        background: #f8f9fa;
-        border-radius: 10px;
-        padding: 15px;
-        text-align: center;
-    }
+.info-label {
+    color: #667;
+    font-size: 12px;
+    margin-bottom: 5px;
+}
 
-    .info-label {
-        color: #667;
-        font-size: 12px;
-        margin-bottom: 5px;
-    }
+.info-value {
+    color: #333;
+    font-size: 18px;
+    font-weight: bold;
+}
 
-    .info-value {
-        color: #333;
-        font-size: 18px;
-        font-weight: bold;
-    }
+.loading {
+    text-align: center;
+    color: #667;
+    font-style: italic;
+}
 
-    .loading {
-        text-align: center;
-        color: #667;
-        font-style: italic;
-    }
+.error {
+    background: #fee;
+    color: #c33;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+}
 
-    .error {
-        background: #fee;
-        color: #c33;
-        padding: 15px;
-        border-radius: 10px;
-        text-align: center;
-    }
+.refresh-btn {
+    width: 100%;
+    padding: 12px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background 0.3s;
+}
 
-    .refresh-btn {
-        width: 100%;
-        padding: 12px;
-        background: #667eea;
-        color: white;
-        border: none;
-        border-radius: 10px;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-        margin-top: 20px;
-        transition: background 0.3s;
-    }
+.refresh-btn:hover {
+    background: #5568d3;
+}
 
-    .refresh-btn:hover {
-        background: #5568d3;
-    }
+.timestamp {
+    text-align: center;
+    color: #999;
+    font-size: 12px;
+    margin-top: 15px;
+}
 
-    .timestamp {
-        text-align: center;
-        color: #999;
-        font-size: 12px;
-        margin-top: 15px;
-    }
 </style>
 
 </head>
@@ -145,7 +145,8 @@
         String(today.getDate()).padStart(2, '0') + '/' +
         today.getFullYear();
 
-    document.getElementById('today-date').textContent = formattedDate;
+document.getElementById('today-date').textContent = formattedDate;
+
 </script>
         <div id="content">
             <p class="loading">Loading gold prices...</p>
@@ -153,6 +154,61 @@
     </div>
 
 <script>
+    let currentPricePerGram = 0;
+    let currentPricePerOunce = 0;
+
+    function calculateCustomAmount() {
+        const amount = parseFloat(document.getElementById('customAmount').value);
+        const unit = document.getElementById('unitSelect').value;
+        const customResult = document.getElementById('customResult');
+        const customPrice = document.getElementById('customPrice');
+        const customConversion = document.getElementById('customConversion');
+        
+        if (amount && amount > 0 && currentPricePerGram > 0) {
+            let totalPrice = 0;
+            let grams = 0;
+            let unitLabel = '';
+            
+            // Convert to grams and calculate price based on selected unit
+            switch(unit) {
+                case 'gram':
+                    grams = amount;
+                    totalPrice = currentPricePerGram * amount;
+                    unitLabel = `${amount}g`;
+                    break;
+                case 'ounce':
+                    grams = amount * 31.1035;
+                    totalPrice = currentPricePerOunce * amount;
+                    unitLabel = `${amount} oz`;
+                    break;
+                case 'chi':
+                    grams = amount * 3.75;
+                    totalPrice = currentPricePerGram * grams;
+                    unitLabel = `${amount} chi`;
+                    break;
+                case 'damlung':
+                    grams = amount * 37.5;
+                    totalPrice = currentPricePerGram * grams;
+                    unitLabel = `${amount} damlung`;
+                    break;
+            }
+            
+            customPrice.innerHTML = `${unitLabel} = $${totalPrice.toFixed(2)}`;
+            
+            // Show conversions to other units
+            const conversions = [];
+            if (unit !== 'ounce') conversions.push(`${(grams / 31.1035).toFixed(3)} oz`);
+            if (unit !== 'gram') conversions.push(`${grams.toFixed(2)} g`);
+            if (unit !== 'chi') conversions.push(`${(grams / 3.75).toFixed(2)} chi`);
+            if (unit !== 'damlung') conversions.push(`${(grams / 37.5).toFixed(3)} damlung`);
+            
+            customConversion.innerHTML = conversions.join(' | ');
+            customResult.style.display = 'block';
+        } else {
+            customResult.style.display = 'none';
+        }
+    }
+
     async function fetchGoldPrice() {
         const contentDiv = document.getElementById('content');
         
@@ -165,8 +221,10 @@
             
             const data = await response.json();
             const pricePerOunce = data.price;
+            currentPricePerOunce = pricePerOunce;
             
             const pricePerGram = pricePerOunce / 31.1035;
+            currentPricePerGram = pricePerGram;
             const pricePerDamlung = pricePerGram * 37.5;
             const pricePerChi = pricePerGram * 3.75;
             
@@ -189,19 +247,42 @@
 
                 <div class="info-grid">
                     <div class="info-box">
-                        <div class="info-label">Per Chi</div>
+                        <div class="info-label">Per Chi (3.75g)</div>
                         <div class="info-value">$${pricePerChi.toFixed(2)}</div>
                     </div>
                     <div class="info-box">
-                        <div class="info-label">Cambodia</div>
-                        <div class="info-value">🏆</div>
+                        <div class="info-label">Custom Calculator</div>
+                        <div class="info-value" style="display: flex; flex-direction: column; gap: 8px;">
+                            <input type="number" id="customAmount" placeholder="0" min="0" step="0.01"
+                                   oninput="calculateCustomAmount()"
+                                   style="width: 100%; padding: 5px; border: 2px solid #667eea; border-radius: 5px; text-align: center; font-size: 16px; font-weight: bold;">
+                            <select id="unitSelect" onchange="calculateCustomAmount()"
+                                    style="width: 100%; padding: 5px; border: 2px solid #667eea; border-radius: 5px; text-align: center; font-size: 14px; font-weight: bold; background: white; cursor: pointer;">
+                                <option value="gram">Gram (g)</option>
+                                <option value="ounce">Ounce (oz)</option>
+                                <option value="chi">Chi (3.75g)</option>
+                                <option value="damlung">Damlung (37.5g)</option>
+                            </select>
+                        </div>
                     </div>
+                </div>
+                
+                <div id="customResult" style="display: none; background: #e8f5e9; border-radius: 10px; padding: 15px; margin-top: 15px; text-align: center;">
+                    <div style="color: #2e7d32; font-size: 14px; margin-bottom: 8px; font-weight: 600;">Custom Calculation</div>
+                    <div id="customPrice" style="color: #1b5e20; font-size: 24px; font-weight: bold;"></div>
+                    <div id="customConversion" style="color: #4caf50; font-size: 14px; margin-top: 8px;"></div>
                 </div>
                 
                 <button class="refresh-btn" onclick="fetchGoldPrice()">🔄 Refresh Price</button>
                 
                 <div class="timestamp">Last updated: ${new Date().toLocaleString()}</div>
             `;
+            
+            // Recalculate if there was a previous value
+            const existingValue = document.getElementById('customAmount')?.value;
+            if (existingValue) {
+                calculateCustomAmount();
+            }
             
         } catch (error) {
             contentDiv.innerHTML = `
@@ -219,7 +300,7 @@
     fetchGoldPrice();
 
     // Auto-refresh every 10 seconds
-    setInterval(fetchGoldPrice, 10000);
+    setInterval(fetchGoldPrice, 100000);
 </script>
 
 </body>

@@ -136,7 +136,7 @@
 </head>
 <body>
     <div class="container">
-        <div class="gold-icon">ð°ð­</div>
+        <div class="gold-icon">🇰🇭</div>
         <h1>Gold Price <span id="today-date"></span></h1>
 <script>
     const today = new Date();
@@ -194,11 +194,11 @@
                     </div>
                     <div class="info-box">
                         <div class="info-label">Cambodia</div>
-                        <div class="info-value">ð</div>
+                        <div class="info-value">🏆</div>
                     </div>
                 </div>
                 
-                <button class="refresh-btn" onclick="fetchGoldPrice()">ð Refresh Price</button>
+                <button class="refresh-btn" onclick="fetchGoldPrice()">🔄 Refresh Price</button>
                 
                 <div class="timestamp">Last updated: ${new Date().toLocaleString()}</div>
             `;
@@ -206,11 +206,11 @@
         } catch (error) {
             contentDiv.innerHTML = `
                 <div class="error">
-                    â ï¸ Error fetching gold price: ${error.message}
+                    ⚠️ Error fetching gold price: ${error.message}
                     <br><br>
                     Please check your internet connection or try again later.
                 </div>
-                <button class="refresh-btn" onclick="fetchGoldPrice()">ð Try Again</button>
+                <button class="refresh-btn" onclick="fetchGoldPrice()">🔄 Try Again</button>
             `;
         }
     }

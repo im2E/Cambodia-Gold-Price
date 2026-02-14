@@ -298,8 +298,6 @@ document.getElementById('today-date').textContent = formattedDate;
                 
                 <div class="timestamp">Last updated: ${new Date().toLocaleString()}</div>
                 <div class="timestamp">Note: Gold prices update continuously during market hours, from Sunday 3:00pm PST to Friday 2:15pm PST</div>
-
-				<div id="embed" style="height: 400px; width: 660px; "></div>
             `;
             
             // Recalculate if there was a previous value
@@ -318,6 +316,7 @@ document.getElementById('today-date').textContent = formattedDate;
                 <button class="refresh-btn" onclick="fetchGoldPrice()">🔄 Try Again</button>
             `;
         }
+		<div id="embed" style="height: 400px; width: 660px; "></div>
     }
     
     // Fetch price on page load

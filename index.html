@@ -24,13 +24,13 @@ body {
 .container {
     background: white;
     border-radius: 20px;
-    padding: 5px;
+    padding: 10px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     max-width: 500px;
     width: 100%;
 }
 
-h1 {
+.h1 {
     color: #333;
     text-align: center;
     margin-bottom: 5px;
@@ -39,7 +39,7 @@ h1 {
 
 .gold-icon {
     text-align: center;
-    font-size: 80px;
+    font-size: 100px;
     margin-bottom: 1px;
 }
 
@@ -137,7 +137,7 @@ h1 {
 <body>
     <div class="container">
         <div class="gold-icon">🇰🇭</div>
-        <h1>Gold Price <span id="today-date"></span></h1>
+        <div class="h1">Gold Price <span id="today-date"></span></div>
 <script>
     const today = new Date();
     const formattedDate =

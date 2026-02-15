@@ -286,6 +286,7 @@ document.getElementById('today-date').textContent = formattedDate;
                             </select>
                         </div>
                     </div>
+					<div id="embed" style="height: 400px; width: 660px; "></div>
                 </div>
                 
                 <div id="customResult" style="display: none; background: #e8f5e9; border-radius: 10px; padding: 15px; margin-top: 15px; text-align: center;">
@@ -298,6 +299,7 @@ document.getElementById('today-date').textContent = formattedDate;
                 
                 <div class="timestamp">Last updated: ${new Date().toLocaleString()}</div>
                 <div class="timestamp">Note: Gold prices update continuously during market hours, from Sunday 3:00pm PST to Friday 2:15pm PST</div>
+				
             `;
             
             // Recalculate if there was a previous value
@@ -326,5 +328,4 @@ document.getElementById('today-date').textContent = formattedDate;
 	
 </script>
 </body>
-<div id="embed" style="height: 400px; width: 660px; "></div>	
 </html>

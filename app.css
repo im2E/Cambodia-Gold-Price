@@ -124,3 +124,7 @@ h1 {
     font-size: 12px;
     margin-top: 15px;
 }
+
+.image-container {
+    width: 100%;
+}

@@ -126,10 +126,10 @@ h1 {
 }
 
 .image-container {
-  width: 100px; /* Set the desired width of the container */
-  height: 100px; /* Set the desired height of the container */
+  width: 50px; /* Set the desired width of the container */
+  height: 50px; /* Set the desired height of the container */
   border: 2px solid black; /* Optional: adds a border so you can see the div */
-  text-align: center;
+  align-items: center;
 }
 
 .image-container img {

@@ -126,9 +126,9 @@ h1 {
 }
 
 .image-container {
-  width: 500px; /* Set the desired width of the container */
-  height: 300px; /* Set the desired height of the container */
-  border: 1px solid black; /* Optional: adds a border so you can see the div */
+  width: 200px; /* Set the desired width of the container */
+  height: 200px; /* Set the desired height of the container */
+  border: 2px solid black; /* Optional: adds a border so you can see the div */
 }
 
 .image-container img {

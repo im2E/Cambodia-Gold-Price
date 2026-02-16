@@ -126,5 +126,6 @@ h1 {
 }
 
 .image-container {
-    width: 100%;
+    text-align: center;
+    width: 25%;
 }

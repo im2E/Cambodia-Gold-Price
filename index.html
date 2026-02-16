@@ -134,25 +134,6 @@ h1 {
 </style>
 
 <script type="text/javascript" src="https://www.bullionvault.com/chart/bullionvaultchart.js" ></script>
-		<script type="text/javascript" >
-			var options = {
-				bullion: 'gold',
-				currency: 'USD',
-				timeframe: '1m',
-				chartType: 'line',
-				miniChartModeAxis: 'oz',
-				referrerID: 'MYUSERNAME',
-				containerDefinedSize: true,
-				miniChartMode: true,
-				displayLatestPriceLine: true,
-				switchBullion: true,
-				switchCurrency: true,
-				switchTimeframe: true,
-				switchChartType: false,
-				exportButton: true
-			};
-			var chartBV = new BullionVaultChart(options, 'embed');
-		</script>
 </head>
 
 <body>
@@ -302,6 +283,27 @@ document.getElementById('today-date').textContent = formattedDate;
                 <div id="embed" style="height: 635px; width: 100%; margin-top: 20px;"></div>
             `;
 			
+            // Initialize BullionVault chart after the embed div is created
+            setTimeout(function() {
+                var options = {
+                    bullion: 'gold',
+                    currency: 'USD',
+                    timeframe: '1m',
+                    chartType: 'line',
+                    miniChartModeAxis: 'oz',
+                    referrerID: 'MYUSERNAME',
+                    containerDefinedSize: true,
+                    miniChartMode: true,
+                    displayLatestPriceLine: true,
+                    switchBullion: true,
+                    switchCurrency: true,
+                    switchTimeframe: true,
+                    switchChartType: false,
+                    exportButton: true
+                };
+                var chartBV = new BullionVaultChart(options, 'embed');
+            }, 100);
+            
             // Recalculate if there was a previous value
             const existingValue = document.getElementById('customAmount')?.value;
             if (existingValue) {

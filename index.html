@@ -153,6 +153,7 @@ h1 {
 			};
 			var chartBV = new BullionVaultChart(options, 'embed');
 		</script>
+</head>
 
 <body>
     <div class="container">
@@ -297,6 +298,8 @@ document.getElementById('today-date').textContent = formattedDate;
                 
                 <div class="timestamp">Last updated: ${new Date().toLocaleString()}</div>
                 <div class="timestamp">Note: Gold prices update continuously during market hours, from Sunday 3:00pm PST to Friday 2:15pm PST</div>
+                
+                <div id="embed" style="height: 635px; width: 100%; margin-top: 20px;"></div>
             `;
 			
             // Recalculate if there was a previous value
@@ -325,4 +328,3 @@ document.getElementById('today-date').textContent = formattedDate;
 </script>
 </body>
 </html>
-	<div id="embed" style="height: 635px; width: 700px; "></div>

@@ -315,7 +315,6 @@ document.getElementById('today-date').textContent = formattedDate;
                 <button class="refresh-btn" onclick="fetchGoldPrice()">🔄 Try Again</button>
             `;
         }
-		<div id="embed" style="height: 635px; width: 700px; "></div>
     }
     
     // Fetch price on page load
@@ -324,6 +323,8 @@ document.getElementById('today-date').textContent = formattedDate;
     // Auto-refresh every 10 seconds
     setInterval(fetchGoldPrice, 100000);
 </script>
-
+<div class="price-card">
+    <div id="embed" style="height: 635px; width: 700px; "></div>
+</div>
 </body>   
 </html>
